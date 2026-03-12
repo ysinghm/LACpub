@@ -133,6 +133,10 @@ abbrev anbm : Lang SigmaABC
 := { a^n ++ b^m | (n : ℕ)(m : ℕ)}
 -- ANCHOR_END: anbm
 
+abbrev anbn : Lang SigmaABC
+:= { a^n ++ b^n | (n : ℕ)}
+
+
 example : [a,a,b] ∈ anbm := by
   use 2 , 1
   rfl
