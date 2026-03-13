@@ -1,4 +1,6 @@
 import Proofs.Lang
+import Proofs.CFG
+import Proofs.Autom
 
 namespace Pda
 open Lang
@@ -86,3 +88,47 @@ abbrev P₁ : PDA SigmaABC
 
 
 end PdaEx
+
+namespace CfgPda
+open Pda
+open Lang
+open Cfg
+open Sum
+
+variable {Sigma : Type}[Alphabet Sigma]
+
+variable (G : CFG Sigma)
+
+abbrev cfg2pda : PDA Sigma :=
+{ Q := Fin 1
+  Γ := G.NT ⊕ Sigma
+  s := (0 : Fin 1)
+  Z₀ := inl G.S
+  δ := fun q x z =>
+    match x, z with
+    | none, inl A =>
+        (⟪ p ∈ G.P | p.1 = A ⟫).biUnion
+          (fun p => { ((0 : Fin 1), p.2) })
+    | some x, inr y =>
+        if h : x = y then
+          { ((0 : Fin 1), ([] : List (G.NT ⊕ Sigma))) }
+        else
+          {}
+    | _, _ => {}
+  F := {}   -- acceptance by empty stack
+}
+
+end CfgPda
+-- abbrev cfg2pda : PDA Sigma
+-- := { Q := Fin 1
+--      Γ := G.NT ⊕ Sigma
+--      s := 0
+--      Z₀ := inl G.S
+--      δ q x z := match x , z with
+--                 | none , inl A =>
+--                    { (0 , α) | (A , α ) ∈ G.P  }
+--                 | some x, inr y =>
+--                    { (0 , []) | x = y }
+--                 | _,_ => {}
+--      F := {} -- acceptance by empty stack
+-- }

@@ -11,6 +11,9 @@ structure CFG : Type 1 where
   S : NT
   P : Finset (NT × Word (Sum NT Sigma ))
 
+instance {G : CFG Sigma} : Alphabet G.NT :=
+  G.alphNT
+
 open CFG
 open Sum
 

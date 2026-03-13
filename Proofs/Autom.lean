@@ -126,6 +126,13 @@ macro "⟪" q:ident " | " P:term "⟫" : term =>
 macro "⟪" q:ident " ∈ " xs:term " | " P:term "⟫" : term =>
   `( ($xs).filter (fun $q => $P) )
 
+macro "⟪" q:ident " ∈ " xs:term " ↦ " f:term "⟫" : term =>
+  `( ($xs).image
+      ⟨fun $q => $f, by
+        intro a b h
+        cases h
+        rfl⟩ )
+
 -- ANCHOR: delta_step
 def δ_step (A : NFA Sigma) (S : Finset A.Q) (a : Sigma) : Finset A.Q :=
   ⟪ q | ∃ p ∈ S, q ∈ A.δ p a ⟫
